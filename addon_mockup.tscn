@@ -1,0 +1,78 @@
+[gd_scene load_steps=6 format=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+
+bg_color = Color( 0.196078, 0.231373, 0.309804, 1 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color( 0.196078, 0.231373, 0.309804, 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color( 0.196078, 0.231373, 0.309804, 1 )
+border_width_top = 10
+border_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id=4]
+
+bg_color = Color( 0.113725, 0.168627, 0.847059, 1 )
+
+[sub_resource type="GDScript" id=5]
+
+script/source = "extends Tree
+
+var root
+
+func _ready():
+	root = create_item()
+	root.set_text(0,\"Bundle O Controls\")
+	set_column_expand(0,true)
+	
+	for i in range(1,10):
+		var new_item = create_item(root)
+		new_item.set_text(0,str(i))
+		new_item.set_text(1,str(randf()))"
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -0.902496
+margin_right = -0.902466
+
+[node name="TabContainer" type="TabContainer" parent="."]
+margin_left = 16.9025
+margin_top = 16.0
+margin_right = 181.902
+margin_bottom = 270.0
+custom_styles/tab_fg = SubResource( 1 )
+custom_styles/tab_bg = SubResource( 2 )
+custom_styles/panel = SubResource( 3 )
+
+[node name="Shared" type="Tabs" parent="TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 32.0
+margin_right = -10.0
+margin_bottom = -10.0
+
+[node name="Tree" type="Tree" parent="TabContainer/Shared"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/title_button_hover = SubResource( 4 )
+columns = 2
+script = SubResource( 5 )
+

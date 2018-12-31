@@ -1,0 +1,462 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://screen gloss.png" type="Texture" id=1]
+[ext_resource path="res://pico-8/PICO-8.ttf" type="DynamicFontData" id=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+
+bg_color = Color( 0.811765, 0.784314, 0.729412, 1 )
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="GDScript" id=7]
+
+script/source = "#tool
+extends Control
+
+
+var history
+
+func _on_input_panel_exec(arg):
+	if not arg[0]: return 1
+	
+	match arg[0]:
+		\".\":
+			$\"../VBoxContainer/Label\".text = history.join(\".\")
+		\"0\": 
+			if arg.size()>=2:  $\"../screen\".clr(arg[1])
+			else:  $\"../screen\".clr()
+		\"1\": 
+			$\"../screen\".glit()
+	history = arg"
+
+[sub_resource type="GDScript" id=2]
+
+script/source = "tool
+extends Control
+
+signal click(pos)
+
+var color = [ 
+	Color(\"000000\"),
+	Color(\"1d2b53\"),
+	Color(\"7e2553\"),
+	Color(\"008751\"),
+	Color(\"ab5236\"),
+	Color(\"5f574f\"),
+	Color(\"c2c3c7\"),
+	Color(\"fff1e8\"),
+	#
+	Color(\"ff004d\"),
+	Color(\"ffa300\"),
+	Color(\"ffec27\"),
+	Color(\"00e436\"),
+	Color(\"29adff\"),
+	Color(\"83769c\"),
+	Color(\"ff77a8\"),
+	Color(\"ffccaa\")]
+
+var pin = []
+var screen = [] #10:{10:16*5} } #{x:10,y:10,map:1,value:Vector2} }
+var screen_color = []
+
+var img = Image.new()
+var imgtex = ImageTexture.new()
+
+
+func _ready():
+
+	load(\"res://pico-8/pico8_font.png\")
+	img.load(\"res://pico-8/pico8_font.png\")
+	imgtex.create_from_image(img,0)
+	
+	reset()
+	glit()
+
+
+func _gui_input(event):
+	if event is InputEventMouseButton:
+		if event.pressed:
+            emit_signal(\"click\",[event.position])
+
+
+func reset():
+	
+	screen.clear()
+	screen_color.clear()
+	pin.clear()
+	
+	for i in range(0,(16*16)):
+   		screen.append(0)
+	for i in range(0,(16*16)):
+   		screen_color.append(16-1)
+	for i in range(0,127):
+   		pin.append(0)
+	
+	update()
+
+
+func glit(amount=16*16):
+	
+	for i in range(0,amount):
+		screen[ randi()%screen.size() ] = randi()%(16*11)
+		screen_color[ randi()%screen_color.size() ] = randi()%16
+		pin[ randi()%pin.size() ] = randi()%128
+	update()
+
+
+func line(ax,ay, bx,by, color):
+	draw_line( Vector2(ax,ay), Vector2(bx,by), color)
+
+
+func clr(c=0):
+	for i in range(0,screen.size()):
+		screen[i] = c
+	update()
+
+
+func tile(x,y, offset=0):
+	return Rect2( 8*x+offset,8*y+offset, 8,8 )
+
+
+func index2vec(i):
+	
+	var x = 0
+	var y = 0
+	for j in range(0,screen.size()):
+		if j==int(i):
+			return Vector2(x,y)
+		x += 1
+		if x>=16:
+			x=0
+			y+=1
+	return 1
+		
+
+func _draw():
+
+	var x = -1
+	var y = 0
+	for i in range(0,screen.size()):
+		x += 1
+		if x>=16:
+			x=0
+			y+=1
+		draw_texture_rect_region( imgtex, tile(x,y), tile(index2vec(screen[i]).x,index2vec(screen[i]).y), color[screen_color[i]] )
+	
+#	line(0,0, 64,64, color[3]) 
+
+
+
+func _on_Button_pressed():
+	glit()
+
+
+func _on_Button2_pressed():
+	clr()
+"
+
+[sub_resource type="DynamicFont" id=3]
+
+size = 10
+font_data = ExtResource( 2 )
+
+[sub_resource type="GDScript" id=8]
+
+script/source = "#tool
+extends Button
+func _pressed():
+	$\"../Label\".text = \"\""
+
+[sub_resource type="GDScript" id=4]
+
+script/source = "#tool
+extends GridContainer
+
+signal exec(arg)
+
+func _ready():
+	for child in get_children():
+		child.connect(\"pressed\",self,\"press\",[child])
+
+
+func press(arg):
+	var txt = \"\"
+	txt += $\"../Label\".text
+	match arg.text:
+		\"-\": 
+			txt.erase(txt.length()-1, 1)
+		\">\": 
+			emit_signal(\"exec\", txt.split(\".\"))
+			txt = \"\"
+		_: txt += arg.text
+	$\"../Label\".text = str(txt)"
+
+[sub_resource type="DynamicFont" id=5]
+
+font_data = ExtResource( 2 )
+
+[sub_resource type="GDScript" id=6]
+
+script/source = "extends TextEdit
+
+#onready var s = Script.new()
+#func _on_TextEdit_text_changed():
+#	s.source_code = text
+#	get_parent().set_script(s)
+"
+
+[node name="pico-8" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="case" type="PanelContainer" parent="."]
+margin_right = 480.0
+margin_bottom = 300.0
+custom_styles/panel = SubResource( 1 )
+
+[node name="cartridge" type="Control" parent="."]
+margin_left = 312.415
+margin_top = 240.376
+margin_right = 442.415
+margin_bottom = 267.376
+script = SubResource( 7 )
+
+[node name="ColorRect" type="ColorRect" parent="cartridge"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.431373, 0.431373, 0.431373, 1 )
+
+[node name="screen" type="Control" parent="."]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 148.0
+margin_bottom = 148.0
+rect_min_size = Vector2( 128, 128 )
+rect_scale = Vector2( 2, 2 )
+script = SubResource( 2 )
+
+[node name="TextureRect" type="TextureRect" parent="screen"]
+modulate = Color( 1, 1, 1, 0.392157 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 128, 128 )
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 1
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 415.508
+margin_top = 18.2792
+margin_right = 463.508
+margin_bottom = 143.279
+alignment = 2
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+margin_top = 4.0
+margin_right = 48.0
+margin_bottom = 17.0
+custom_fonts/font = SubResource( 3 )
+align = 2
+clip_text = true
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+margin_top = 21.0
+margin_right = 48.0
+margin_bottom = 41.0
+
+[node name="Button2" type="Button" parent="VBoxContainer"]
+margin_top = 45.0
+margin_right = 48.0
+margin_bottom = 65.0
+text = "CLR"
+script = SubResource( 8 )
+
+[node name="input panel" type="GridContainer" parent="VBoxContainer"]
+editor/display_folded = true
+margin_top = 69.0
+margin_right = 48.0
+margin_bottom = 125.0
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
+columns = 3
+script = SubResource( 4 )
+
+[node name="Button" type="LinkButton" parent="VBoxContainer/input panel"]
+margin_right = 16.0
+margin_bottom = 14.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+action_mode = 0
+text = "7"
+underline = 2
+
+[node name="Button2" type="LinkButton" parent="VBoxContainer/input panel"]
+margin_left = 16.0
+margin_right = 32.0
+margin_bottom = 14.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+action_mode = 0
+text = "8"
+underline = 2
+
+[node name="Button3" type="LinkButton" parent="VBoxContainer/input panel"]
+margin_left = 32.0
+margin_right = 48.0
+margin_bottom = 14.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+action_mode = 0
+text = "9"
+underline = 2
+
+[node name="Button5" type="LinkButton" parent="VBoxContainer/input panel"]
+margin_top = 14.0
+margin_right = 16.0
+margin_bottom = 28.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+action_mode = 0
+text = "4"
+underline = 2
+
+[node name="Button6" type="LinkButton" parent="VBoxContainer/input panel"]
+margin_left = 16.0
+margin_top = 14.0
+margin_right = 32.0
+margin_bottom = 28.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+action_mode = 0
+text = "5"
+underline = 2
+
+[node name="Button4" type="LinkButton" parent="VBoxContainer/input panel"]
+margin_left = 32.0
+margin_top = 14.0
+margin_right = 48.0
+margin_bottom = 28.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+action_mode = 0
+text = "6"
+underline = 2
+
+[node name="Button7" type="LinkButton" parent="VBoxContainer/input panel"]
+margin_top = 28.0
+margin_right = 16.0
+margin_bottom = 42.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+action_mode = 0
+text = "1"
+underline = 2
+
+[node name="Button8" type="LinkButton" parent="VBoxContainer/input panel"]
+margin_left = 16.0
+margin_top = 28.0
+margin_right = 32.0
+margin_bottom = 42.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+action_mode = 0
+text = "2"
+underline = 2
+
+[node name="Button9" type="LinkButton" parent="VBoxContainer/input panel"]
+margin_left = 32.0
+margin_top = 28.0
+margin_right = 48.0
+margin_bottom = 42.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+action_mode = 0
+text = "3"
+underline = 2
+
+[node name="Button10" type="LinkButton" parent="VBoxContainer/input panel"]
+margin_top = 42.0
+margin_right = 16.0
+margin_bottom = 56.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+action_mode = 0
+text = "."
+underline = 2
+
+[node name="Button11" type="LinkButton" parent="VBoxContainer/input panel"]
+margin_left = 16.0
+margin_top = 42.0
+margin_right = 32.0
+margin_bottom = 56.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+action_mode = 0
+text = "0"
+underline = 2
+
+[node name="Button12" type="LinkButton" parent="VBoxContainer/input panel"]
+margin_left = 32.0
+margin_top = 42.0
+margin_right = 48.0
+margin_bottom = 56.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+action_mode = 0
+text = ">"
+underline = 2
+
+[node name="TextEdit" type="TextEdit" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = SubResource( 5 )
+script = SubResource( 6 )
+
+[connection signal="exec" from="VBoxContainer/input panel" to="cartridge" method="_on_input_panel_exec"]
+[connection signal="text_changed" from="TextEdit" to="TextEdit" method="_on_TextEdit_text_changed"]

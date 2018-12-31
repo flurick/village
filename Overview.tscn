@@ -1,0 +1,211 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://Dial.tscn" type="PackedScene" id=1]
+[ext_resource path="res://WindowDialog.gd" type="Script" id=2]
+[ext_resource path="res://TextEdit.gd" type="Script" id=3]
+[ext_resource path="res://internal.gd" type="Script" id=4]
+[ext_resource path="res://Diagram.tscn" type="PackedScene" id=5]
+[ext_resource path="res://LineEdit2.gd" type="Script" id=6]
+[ext_resource path="res://Label.gd" type="Script" id=7]
+
+[sub_resource type="GDScript" id=1]
+
+script/source = "#tool
+extends Panel
+var target
+
+func _ready():
+	target = get_node(\"../WindowDialog\").get_instance_id()
+
+func _gui_input(event):
+	if event is InputEventMouseButton:
+		if event.pressed:
+			instance_from_id(target).show()"
+
+[sub_resource type="GDScript" id=2]
+
+script/source = "extends LineEdit
+
+func _ready():
+	connect(\"text_changed\", self, \"text_changed\")
+
+func text_changed(arg):
+	pass
+
+func _gui_input(event):
+	if event is InputEventKey:
+		if event.pressed:
+			match event.scancode:
+				KEY_ESCAPE:
+					hide()
+					$\"../TextEdit\".grab_focus()
+				KEY_ENTER:
+					get_parent().name = str(text)
+					get_parent().window_title = str(text)
+					hide()
+					$\"../TextEdit\".grab_focus()"
+
+[sub_resource type="StyleBoxEmpty" id=3]
+
+
+[sub_resource type="ButtonGroup" id=4]
+
+resource_name = "diagram_type"
+
+[sub_resource type="GDScript" id=5]
+
+script/source = "extends Button
+
+func _ready():
+	connect(\"pressed\", self, \"_pressed\")
+
+func _pressed():
+	get_tree().get_nodes_in_group(\"diagram\")[0].set_type(text)"
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -0.794434
+margin_right = -0.794434
+mouse_filter = 2
+
+[node name="Disks" type="Panel" parent="."]
+margin_right = 232.0
+margin_bottom = 82.0
+script = SubResource( 1 )
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Disks"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+alignment = 1
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Dial" parent="Disks/HBoxContainer2" instance=ExtResource( 1 )]
+margin_left = 0.0
+margin_right = 71.0
+
+[node name="Dial2" parent="Disks/HBoxContainer2" instance=ExtResource( 1 )]
+margin_left = 75.0
+margin_right = 146.0
+
+[node name="Dial3" parent="Disks/HBoxContainer2" instance=ExtResource( 1 )]
+margin_left = 150.0
+margin_right = 222.0
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+
+[node name="WindowDialog" type="WindowDialog" parent="."]
+editor/display_folded = true
+margin_left = 174.0
+margin_top = 132.0
+margin_right = 537.0
+margin_bottom = 392.0
+script = ExtResource( 2 )
+
+[node name="LineEdit" type="LineEdit" parent="WindowDialog"]
+visible = false
+anchor_right = 1.0
+margin_top = -20.5826
+margin_bottom = 3.41742
+focus_mode = 1
+align = 1
+focus_mode = 1
+context_menu_enabled = false
+caret_blink = true
+script = SubResource( 2 )
+
+[node name="TextEdit" type="TextEdit" parent="WindowDialog"]
+margin_left = 13.9025
+margin_top = 35.0
+margin_right = 118.902
+margin_bottom = 180.0
+text = "dmax 24
+d 6"
+script = ExtResource( 3 )
+
+[node name="internal" type="TextEdit" parent="WindowDialog"]
+editor/display_folded = true
+margin_left = 132.964
+margin_top = 35.0
+margin_right = 223.964
+margin_bottom = 180.0
+custom_styles/normal = SubResource( 3 )
+readonly = true
+context_menu_enabled = false
+script = ExtResource( 4 )
+
+[node name="Filter" type="LineEdit" parent="WindowDialog/internal"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -24.0
+placeholder_text = "Filter"
+
+[node name="Diagram" parent="WindowDialog" groups=[
+"diagram",
+] instance=ExtResource( 5 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 229.0
+margin_top = 36.0
+margin_right = 360.0
+margin_bottom = 252.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="WindowDialog"]
+margin_left = 228.0
+margin_top = 6.0
+margin_right = 361.0
+margin_bottom = 31.0
+alignment = 1
+
+[node name="Button" type="Button" parent="WindowDialog/HBoxContainer"]
+margin_left = 3.0
+margin_right = 50.0
+margin_bottom = 25.0
+toggle_mode = true
+group = SubResource( 4 )
+text = "Block"
+script = SubResource( 5 )
+
+[node name="Button2" type="Button" parent="WindowDialog/HBoxContainer"]
+margin_left = 54.0
+margin_right = 86.0
+margin_bottom = 25.0
+toggle_mode = true
+group = SubResource( 4 )
+text = "Pie"
+script = SubResource( 5 )
+
+[node name="Button3" type="Button" parent="WindowDialog/HBoxContainer"]
+margin_left = 90.0
+margin_right = 129.0
+margin_bottom = 25.0
+toggle_mode = true
+group = SubResource( 4 )
+text = "Line"
+script = SubResource( 5 )
+
+[node name="LineEdit2" type="LineEdit" parent="WindowDialog"]
+margin_left = 15.0
+margin_top = 194.707
+margin_right = 220.0
+margin_bottom = 218.707
+script = ExtResource( 6 )
+
+[node name="Label" type="Label" parent="WindowDialog"]
+margin_left = 19.0
+margin_top = 230.0
+margin_right = 219.0
+margin_bottom = 244.0
+script = ExtResource( 7 )
+
+[connection signal="gui_input" from="WindowDialog" to="WindowDialog" method="_on_WindowDialog_gui_input"]
+[connection signal="text_changed" from="WindowDialog/TextEdit" to="WindowDialog/TextEdit" method="_on_TextEdit_text_changed"]
+[connection signal="text_changed" from="WindowDialog/internal/Filter" to="WindowDialog/internal" method="_on_Filter_text_changed"]
+[connection signal="text_changed" from="WindowDialog/LineEdit2" to="WindowDialog/LineEdit2" method="_on_LineEdit2_text_changed"]

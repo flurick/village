@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://BlockDiagram.gd" type="Script" id=1]
+
+[node name="Diagram" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+type = 0.0
+value = 12.0
+fg = Color( 0.898039, 0.0980392, 0.6, 0.403922 )
+bg = Color( 0.0980392, 0.898039, 0.6, 0.360784 )
+

@@ -1,0 +1,595 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://build-sim-ui.gd" type="Script" id=1]
+[ext_resource path="res://Build.gd" type="Script" id=2]
+[ext_resource path="res://icon.png" type="Texture" id=3]
+[ext_resource path="res://addon_mockup.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Overview.tscn" type="PackedScene" id=5]
+[ext_resource path="res://pico-8/pico-8.tscn" type="PackedScene" id=6]
+
+[sub_resource type="GDScript" id=1]
+
+script/source = "extends Button
+
+func _on_Toolbar_Toggle_toggled(button_pressed):
+	$\"../ui/toolbar\".visible = button_pressed
+"
+
+[sub_resource type="GDScript" id=2]
+
+script/source = "extends ToolButton
+export var action = \"Template\"
+
+func _pressed():
+	get_tree().get_nodes_in_group(\"ui\")[0].action = action"
+
+[sub_resource type="ButtonGroup" id=3]
+
+
+[sub_resource type="GDScript" id=4]
+
+script/source = "#tool
+extends CheckButton
+
+func _on_CheckButton_toggled(button_pressed):
+	var cam = get_tree().get_nodes_in_group(\"camera\")
+	if not cam: return 1
+	cam[0].environment.dof_blur_far_enabled = pressed
+	cam[0].environment.dof_blur_near_enabled = pressed
+#	environment_set_dof_blur_near(
+"
+
+[sub_resource type="GDScript" id=5]
+
+script/source = "#tool
+extends Button
+func _pressed():
+	OS.window_fullscreen = pressed #not in alpha4?"
+
+[sub_resource type="GDScript" id=6]
+
+script/source = "extends Button
+
+func _pressed():
+	get_tree().get_nodes_in_group(\"ResetSettingsDialog\")[0].show()"
+
+[node name="ui" type="Control" groups=[
+"ui",
+]]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Toolbar Toggle" type="Button" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -24.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
+toggle_mode = true
+pressed = true
+text = "-"
+flat = true
+script = SubResource( 1 )
+
+[node name="ResetSettingsDialog" type="AcceptDialog" parent="." groups=[
+"ResetSettingsDialog",
+]]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -182.5
+margin_top = -29.0
+margin_right = 182.5
+margin_bottom = 29.0
+window_title = "Reset"
+dialog_text = "Forget all your settings and preferences for this game. "
+
+[node name="toolbar" type="Panel" parent="."]
+editor/display_folded = true
+self_modulate = Color( 1, 1, 1, 0.784314 )
+anchor_right = 1.0
+margin_left = -1.0
+margin_right = -1.0
+margin_bottom = 150.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="toolbar"]
+editor/display_folded = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Tools" type="VBoxContainer" parent="toolbar/HBoxContainer"]
+margin_right = 56.0
+margin_bottom = 150.0
+rect_min_size = Vector2( 50, 50 )
+
+[node name="Label" type="Label" parent="toolbar/HBoxContainer/Tools"]
+margin_right = 56.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 0, 26 )
+
+[node name="Button2" type="Button" parent="toolbar/HBoxContainer/Tools"]
+margin_top = 30.0
+margin_right = 56.0
+margin_bottom = 50.0
+action_mode = 0
+text = "VIEW"
+
+[node name="Button4" type="Button" parent="toolbar/HBoxContainer/Tools"]
+margin_top = 54.0
+margin_right = 56.0
+margin_bottom = 74.0
+action_mode = 0
+text = "PAUSE"
+
+[node name="Button3" type="Button" parent="toolbar/HBoxContainer/Tools"]
+margin_top = 78.0
+margin_right = 56.0
+margin_bottom = 98.0
+action_mode = 0
+text = "ABORT"
+
+[node name="Button5" type="Button" parent="toolbar/HBoxContainer/Tools"]
+margin_top = 102.0
+margin_right = 56.0
+margin_bottom = 122.0
+disabled = true
+action_mode = 0
+button_mask = 0
+
+[node name="Button6" type="Button" parent="toolbar/HBoxContainer/Tools"]
+margin_top = 126.0
+margin_right = 56.0
+margin_bottom = 146.0
+disabled = true
+action_mode = 0
+button_mask = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="toolbar/HBoxContainer"]
+margin_left = 60.0
+margin_right = 1024.0
+margin_bottom = 150.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 0
+custom_constants/margin_bottom = 5
+
+[node name="TabContainer" type="TabContainer" parent="toolbar/HBoxContainer/MarginContainer"]
+self_modulate = Color( 1, 1, 1, 0.784314 )
+margin_top = 5.0
+margin_right = 959.0
+margin_bottom = 145.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tab_align = 0
+drag_to_rearrange_enabled = true
+
+[node name="Build" type="Tabs" parent="toolbar/HBoxContainer/MarginContainer/TabContainer"]
+editor/display_folded = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+script = ExtResource( 2 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Build"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Template" type="ToolButton" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Build/HBoxContainer"]
+margin_right = 75.0
+margin_bottom = 104.0
+rect_min_size = Vector2( 75, 75 )
+rect_clip_content = true
+flat = false
+script = SubResource( 2 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Build/HBoxContainer/Template"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="TextureRect" type="TextureRect" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Build/HBoxContainer/Template/VBoxContainer"]
+show_behind_parent = true
+margin_right = 75.0
+margin_bottom = 86.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 3 )
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Build/HBoxContainer/Template/VBoxContainer"]
+margin_top = 90.0
+margin_right = 75.0
+margin_bottom = 104.0
+text = "Template"
+align = 1
+valign = 1
+
+[node name="Resources" type="Tabs" parent="toolbar/HBoxContainer/MarginContainer/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Resources"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Mine" type="Tabs" parent="toolbar/HBoxContainer/MarginContainer/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="Service" type="Tabs" parent="toolbar/HBoxContainer/MarginContainer/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Service"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "Hector, Alex, Julius, 
+Joshua, David, Judas, 
+Arthur, Charles, Godfrey
+
+Deiphille, Synoppe, Hippolyte, 
+Menalyppe, Semiramis, Lampetho, 
+Thamarys, Teuta, Penthésilée"
+
+[node name="Plant" type="Tabs" parent="toolbar/HBoxContainer/MarginContainer/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="Settings" type="Tabs" parent="toolbar/HBoxContainer/MarginContainer/TabContainer"]
+editor/display_folded = true
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/separation = 50
+
+[node name="category" type="VBoxContainer" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer"]
+margin_right = 139.0
+margin_bottom = 108.0
+
+[node name="Title" type="Label" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category"]
+margin_right = 139.0
+margin_bottom = 14.0
+size_flags_vertical = 1
+text = "Popup Context"
+align = 1
+valign = 1
+
+[node name="options" type="GridContainer" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category"]
+margin_top = 18.0
+margin_right = 139.0
+margin_bottom = 102.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+columns = 2
+
+[node name="Label" type="Label" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category/options"]
+margin_right = 59.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Buildings"
+align = 2
+valign = 1
+
+[node name="CheckButton" type="CheckButton" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category/options"]
+margin_left = 63.0
+margin_right = 139.0
+margin_bottom = 40.0
+
+[node name="Label2" type="Label" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category/options"]
+margin_top = 44.0
+margin_right = 59.0
+margin_bottom = 84.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Events"
+align = 2
+valign = 1
+
+[node name="CheckButton2" type="CheckButton" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category/options"]
+margin_left = 63.0
+margin_top = 44.0
+margin_right = 139.0
+margin_bottom = 84.0
+
+[node name="category2" type="VBoxContainer" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer"]
+margin_left = 189.0
+margin_right = 360.0
+margin_bottom = 108.0
+
+[node name="Title" type="Label" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category2"]
+margin_right = 171.0
+margin_bottom = 14.0
+size_flags_vertical = 1
+text = "Camera"
+align = 1
+valign = 1
+
+[node name="options" type="GridContainer" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category2"]
+margin_top = 18.0
+margin_right = 171.0
+margin_bottom = 94.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+columns = 2
+
+[node name="Label" type="Label" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category2/options"]
+margin_right = 69.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Roation"
+align = 2
+valign = 1
+
+[node name="SpinBox2" type="SpinBox" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category2/options"]
+margin_left = 73.0
+margin_right = 171.0
+margin_bottom = 24.0
+value = 5.0
+suffix = "°"
+
+[node name="Label2" type="Label" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category2/options"]
+margin_top = 28.0
+margin_right = 69.0
+margin_bottom = 52.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Movement"
+align = 2
+valign = 1
+
+[node name="SpinBox" type="SpinBox" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category2/options"]
+margin_left = 73.0
+margin_top = 28.0
+margin_right = 171.0
+margin_bottom = 52.0
+step = 0.1
+value = 0.1
+
+[node name="Label3" type="Label" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category2/options"]
+margin_top = 56.0
+margin_right = 69.0
+margin_bottom = 76.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Scroll "
+align = 2
+valign = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category2/options"]
+margin_left = 73.0
+margin_top = 56.0
+margin_right = 171.0
+margin_bottom = 76.0
+custom_constants/separation = 0
+
+[node name="Button" type="Button" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category2/options/HBoxContainer"]
+margin_right = 45.0
+margin_bottom = 20.0
+toggle_mode = true
+group = SubResource( 3 )
+text = "Local"
+
+[node name="Button2" type="Button" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category2/options/HBoxContainer"]
+margin_left = 45.0
+margin_right = 98.0
+margin_bottom = 20.0
+toggle_mode = true
+pressed = true
+group = SubResource( 3 )
+text = "Global"
+
+[node name="category4" type="VBoxContainer" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer"]
+margin_left = 410.0
+margin_right = 515.0
+margin_bottom = 108.0
+
+[node name="Title" type="Label" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category4"]
+margin_right = 105.0
+margin_bottom = 14.0
+size_flags_vertical = 1
+text = "Graphics"
+align = 1
+valign = 1
+
+[node name="options" type="GridContainer" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category4"]
+margin_top = 18.0
+margin_right = 105.0
+margin_bottom = 58.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+columns = 2
+
+[node name="Label" type="Label" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category4/options"]
+margin_right = 25.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "DoF"
+align = 2
+valign = 1
+
+[node name="CheckButton" type="CheckButton" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category4/options"]
+margin_left = 29.0
+margin_right = 105.0
+margin_bottom = 40.0
+pressed = true
+align = 2
+script = SubResource( 4 )
+
+[node name="category3" type="VBoxContainer" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer"]
+margin_left = 565.0
+margin_right = 689.0
+margin_bottom = 108.0
+
+[node name="Label" type="Label" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category3"]
+margin_right = 124.0
+margin_bottom = 14.0
+text = "General"
+
+[node name="Button2" type="Button" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category3"]
+margin_top = 18.0
+margin_right = 124.0
+margin_bottom = 38.0
+toggle_mode = true
+action_mode = 0
+text = "Fullscreen"
+script = SubResource( 5 )
+
+[node name="Button" type="Button" parent="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category3"]
+margin_top = 42.0
+margin_right = 124.0
+margin_bottom = 62.0
+text = "Reset All Settings"
+script = SubResource( 6 )
+
+[node name="Shared" parent="." instance=ExtResource( 4 )]
+anchor_top = 1.0
+anchor_right = 0.0
+margin_left = 0.0
+margin_top = -313.0
+margin_right = 198.0
+
+[node name="Control3" parent="." instance=ExtResource( 5 )]
+margin_top = 147.493
+margin_bottom = 147.493
+
+[node name="Statusbar" type="Panel" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -32.0
+rect_min_size = Vector2( 24, 24 )
+
+[node name="Label" type="Label" parent="Statusbar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 14.0
+valign = 1
+
+[node name="Panel" type="Panel" parent="."]
+editor/display_folded = true
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -216.22
+margin_top = -113.84
+margin_right = -0.2229
+margin_bottom = -31.84
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="ViewportContainer" type="ViewportContainer" parent="Panel/ScrollContainer"]
+
+[node name="resource map" type="Node2D" parent="Panel/ScrollContainer/ViewportContainer"]
+position = Vector2( 10.0238, 5.72784 )
+scale = Vector2( 0.359679, 0.416216 )
+
+[node name="Line2D" type="Line2D" parent="Panel/ScrollContainer/ViewportContainer/resource map"]
+position = Vector2( -180.954, 26.9399 )
+points = PoolVector2Array( 228.349, 80.7844, 264.525, 112.439, 315.774, 119.975, 373.053, 103.395, 388.127, 100.38, 434.854, 106.409, 550.919, 122.99, 606.691, 98.8725, 641.36, 92.8431 )
+texture_mode = 277
+
+[node name="Line2D2" type="Line2D" parent="Panel/ScrollContainer/ViewportContainer/resource map"]
+position = Vector2( -180.954, 26.9399 )
+points = PoolVector2Array( 548.909, 123.305, 579.933, 137.709, 597.662, 151.006, 629.795, 164.302 )
+texture_mode = 277
+
+[node name="Line2D3" type="Line2D" parent="Panel/ScrollContainer/ViewportContainer/resource map"]
+position = Vector2( -180.954, 26.9399 )
+points = PoolVector2Array( 390.46, 97.8199, 443.645, 83.4155, 477.994, 57.9308, 482.427, 35.7701 )
+texture_mode = 277
+
+[node name="concrete" type="Node2D" parent="Panel/ScrollContainer/ViewportContainer/resource map"]
+editor/display_folded = true
+position = Vector2( 294.311, 34.9289 )
+
+[node name="Polygon2D" type="Polygon2D" parent="Panel/ScrollContainer/ViewportContainer/resource map/concrete"]
+polygon = PoolVector2Array( -11.24, 5.33981, 3.72843, -10.2273, 15.1044, 11.3272 )
+
+[node name="Polygon2D2" type="Polygon2D" parent="Panel/ScrollContainer/ViewportContainer/resource map/concrete"]
+position = Vector2( 17.9621, -16.7646 )
+polygon = PoolVector2Array( -11.24, 5.33981, -3.45641, -1.84503, 13.907, 25.6969, 1.93222, 26.8943 )
+
+[node name="electricity" type="Node2D" parent="Panel/ScrollContainer/ViewportContainer/resource map"]
+editor/display_folded = true
+position = Vector2( 24.9484, 83.9589 )
+
+[node name="Polygon2D" type="Polygon2D" parent="Panel/ScrollContainer/ViewportContainer/resource map/electricity"]
+polygon = PoolVector2Array( -16.7198, 10.6842, 3.93536, -5.20441, -4.40613, 6.31482, 7.51025, 6.31482, -7.58386, 21.0117, -2.02283, 11.0814 )
+
+[node name="rock" type="Node2D" parent="Panel/ScrollContainer/ViewportContainer/resource map"]
+editor/display_folded = true
+position = Vector2( 486, 108.17 )
+
+[node name="Polygon2D" type="Polygon2D" parent="Panel/ScrollContainer/ViewportContainer/resource map/rock"]
+polygon = PoolVector2Array( -16.7198, 10.6842, -7.10596, 8.04077, -3.31006, 15.0485, -7.58386, 21.0117, -16.7416, 16.5085 )
+
+[node name="Polygon2D2" type="Polygon2D" parent="Panel/ScrollContainer/ViewportContainer/resource map/rock"]
+rotation = -1.0472
+polygon = PoolVector2Array( -16.7198, 10.6842, -7.10596, 8.04077, -3.31006, 15.0485, -7.58386, 21.0117, -16.7416, 16.5085 )
+
+[node name="Polygon2D3" type="Polygon2D" parent="Panel/ScrollContainer/ViewportContainer/resource map/rock"]
+position = Vector2( -6.42377, -13.4315 )
+rotation = -1.0472
+polygon = PoolVector2Array( -16.7198, 10.6842, -7.10596, 8.04077, -3.31006, 15.0485, -7.58386, 21.0117, -16.7416, 16.5085 )
+
+[node name="pico-8" parent="." instance=ExtResource( 6 )]
+anchor_left = 1.0
+anchor_bottom = 0.0
+margin_left = -494.628
+margin_top = 169.107
+margin_right = -243.628
+margin_bottom = 344.107
+
+[connection signal="toggled" from="Toolbar Toggle" to="Toolbar Toggle" method="_on_Toolbar_Toggle_toggled"]
+[connection signal="tab_selected" from="toolbar/HBoxContainer/MarginContainer/TabContainer" to="." method="_on_TabContainer_tab_selected"]
+[connection signal="toggled" from="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category4/options/CheckButton" to="toolbar/HBoxContainer/MarginContainer/TabContainer/Settings/HBoxContainer/category4/options/CheckButton" method="_on_CheckButton_toggled"]

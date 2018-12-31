@@ -1,0 +1,72 @@
+[gd_scene load_steps=5 format=2]
+
+[sub_resource type="SpatialMaterial" id=1]
+
+roughness = 0.0
+emission_enabled = true
+emission = Color( 1, 1, 1, 1 )
+emission_energy = 0.1
+emission_operator = 0
+emission_on_uv2 = false
+
+[sub_resource type="SphereMesh" id=2]
+
+material = SubResource( 1 )
+radial_segments = 6
+rings = 3
+
+[sub_resource type="CylinderMesh" id=3]
+
+top_radius = 0.3
+bottom_radius = 0.4
+height = 0.1
+radial_segments = 6
+
+[sub_resource type="CylinderMesh" id=4]
+
+top_radius = 0.16
+bottom_radius = 0.4
+height = 3.0
+radial_segments = 6
+
+[node name="Base" type="Spatial"]
+
+[node name="CSGMesh" type="CSGMesh" parent="."]
+mesh = SubResource( 2 )
+
+[node name="CSGMesh2" type="CSGMesh" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.310716, 0.0450132, -1.17519 )
+mesh = SubResource( 3 )
+
+[node name="CSGMesh4" type="CSGMesh" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0119309, 0.0450132, -1.75793 )
+mesh = SubResource( 3 )
+
+[node name="CSGMesh5" type="CSGMesh" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.326186, 0.0450132, -1.1578 )
+mesh = SubResource( 3 )
+
+[node name="CSGMesh3" type="CSGMesh" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.564806, 1.23744, 1.05097 )
+mesh = SubResource( 4 )
+
+[node name="SpotLight" type="SpotLight" parent="."]
+transform = Transform( 1, 0, 0, 0, -0.577846, -0.816146, 0, 0.816146, -0.577846, 0, 0, -1.58765 )
+spot_range = 3.0
+spot_angle = 40.0
+
+[node name="SpotLight4" type="SpotLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.661474, 0.749968, 0, -0.749968, 0.661474, 0, 0.753924, -0.720484 )
+spot_range = 3.0
+spot_angle = 40.0
+
+[node name="SpotLight2" type="SpotLight" parent="."]
+transform = Transform( 0.982273, 0.0444835, -0.182104, -0.187458, 0.233091, -0.954216, 0, 0.971437, 0.237298, 0, 0, 1.20533 )
+spot_range = 3.0
+spot_angle = 40.0
+
+[node name="SpotLight3" type="SpotLight" parent="."]
+transform = Transform( -0.200787, -0.684809, -0.700515, -0.474411, 0.693606, -0.542076, 0.857099, 0.22349, -0.464147, -0.130655, 1.11499, 0.128773 )
+spot_range = 3.0
+spot_angle = 40.0
+
