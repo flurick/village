@@ -4,6 +4,10 @@ importer="texture"
 type="StreamTexture"
 path.s3tc="res://.import/dust_wave.png-421ff5f95ca110652f8ae5aea78be9eb.s3tc.stex"
 path.etc2="res://.import/dust_wave.png-421ff5f95ca110652f8ae5aea78be9eb.etc2.stex"
+metadata={
+"imported_formats": [ "s3tc", "etc2" ],
+"vram_texture": true
+}
 
 [deps]
 

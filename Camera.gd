@@ -2,6 +2,7 @@ extends Camera
 
 var ray_length = 1000
 var hit 
+var placed_blueprint
 
 func group(name, limit=1):
 	if limit==1:

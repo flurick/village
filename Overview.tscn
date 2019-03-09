@@ -156,6 +156,9 @@ margin_left = 229.0
 margin_top = 36.0
 margin_right = 360.0
 margin_bottom = 252.0
+value_max = 24
+size = 8
+space = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="WindowDialog"]
 margin_left = 228.0

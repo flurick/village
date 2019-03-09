@@ -3,6 +3,9 @@
 importer="texture"
 type="StreamTexture"
 path="res://.import/pico8_font.png-40f5433e1b675f10e36028d69694db26.stex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 

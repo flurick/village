@@ -3,6 +3,9 @@
 importer="texture"
 type="StreamTexture"
 path="res://.import/pico8_pal_017.png-1112cf7a537dd8a0761cdcd30f21310b.stex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 

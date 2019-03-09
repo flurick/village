@@ -58,4 +58,5 @@ common/physics_fps=24
 
 [rendering]
 
+environment/default_clear_color=Color( 1, 0.866667, 0, 1 )
 environment/default_environment="res://default_env.tres"

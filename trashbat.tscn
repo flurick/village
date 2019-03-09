@@ -1,0 +1,114 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://trashbat.gd" type="Script" id=1]
+[ext_resource path="res://trashbat-minigame.gd" type="Script" id=2]
+[ext_resource path="res://lady.gd" type="Script" id=3]
+
+[node name="world" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="car" type="Polygon2D" parent="."]
+editor/display_folded = true
+position = Vector2( 242.419, 128.926 )
+scale = Vector2( 5, 5 )
+polygon = PoolVector2Array( -8.91183, -11.3043, 1.35487, -12.0792, 34.6431, -11.1889, 36.741, -0.349804, 34.6431, 11.3634, 1.16116, 13.8782, -8.71812, 12.1348, -10.2678, 7.29199, -9.88039, -6.26781 )
+color = Color( 0.588235, 0.498039, 0.427451, 1 )
+offset = Vector2( -1.84821, 0.123348 )
+script = ExtResource( 2 )
+
+[node name="wheel" type="Polygon2D" parent="car"]
+show_behind_parent = true
+position = Vector2( -2.42984, -11.5013 )
+polygon = PoolVector2Array( -3.71367, -1.17797, 2.9279, -1.17797, 3.08989, 1.17088, -3.79466, 1.33287 )
+color = Color( 0, 0, 0, 1 )
+
+[node name="wheel3" type="Polygon2D" parent="car"]
+show_behind_parent = true
+position = Vector2( -1.29592, 11.9872 )
+polygon = PoolVector2Array( -3.71367, -1.17797, 2.9279, -1.17797, 3.08989, 1.17088, -3.79466, 1.33287 )
+color = Color( 0, 0, 0, 1 )
+
+[node name="wheel2" type="Polygon2D" parent="car"]
+show_behind_parent = true
+position = Vector2( 26.1613, -11.1773 )
+polygon = PoolVector2Array( -3.71367, -1.17797, 2.9279, -1.17797, 3.08989, 1.17088, -3.79466, 1.33287 )
+color = Color( 0, 0, 0, 1 )
+
+[node name="wheel4" type="Polygon2D" parent="car"]
+show_behind_parent = true
+position = Vector2( 27.3762, 11.7442 )
+polygon = PoolVector2Array( -3.71367, -1.17797, 2.9279, -1.17797, 3.08989, 1.17088, -3.79466, 1.33287 )
+color = Color( 0, 0, 0, 1 )
+
+[node name="rooof" type="Polygon2D" parent="car"]
+position = Vector2( 0.358482, 0 )
+polygon = PoolVector2Array( -6.00616, -9.17349, 4.20083, -9.83227, 23.9793, -8.58583, 25.5688, 0.899509, 23.2443, 11.3599, 3.67941, 12.5222, -7.16843, 10.3914, -8.91183, 6.12972, -8.52441, -6.65524 )
+color = Color( 0.878906, 0.807646, 0.751877, 1 )
+
+[node name="glass" type="Polygon2D" parent="car"]
+position = Vector2( 15.8707, -0.755745 )
+polygon = PoolVector2Array( -2.24932, -5.83911, 6.15836, -6.21699, 8.33113, 1.62388, 6.34729, 11.1652, -2.24932, 10.9762, -1.39911, 1.71835 )
+color = Color( 0.705882, 0.792157, 0.956863, 1 )
+
+[node name="glass2" type="Polygon2D" parent="car"]
+position = Vector2( -4.34554, -1.7949 )
+polygon = PoolVector2Array( -2.24932, -5.83911, 0.679197, -6.21699, 1.24601, -1.87145, 0.679197, 6.6307, 0.301325, 11.4486, -2.24932, 10.9762, -3.76081, 5.59155, -3.57188, -1.77698 )
+color = Color( 0.705882, 0.792157, 0.956863, 1 )
+
+[node name="lady" type="Polygon2D" parent="."]
+editor/display_folded = true
+position = Vector2( 281.285, 333.854 )
+scale = Vector2( 3.23183, 3.23183 )
+polygon = PoolVector2Array( 14.3146, 12.7482, 17.6362, 9.95097, 19.909, 12.923, 19.3845, 16.5943, 25.2408, 19.5717, 27.7761, 26.2097, 27.4264, 35.4754, 23.4055, 40.1956, 20.868, 47.7594, 18.8847, 47.7594, 17.7829, 40.8179, 15.0283, 40.5975, 14.257, 47.6492, 12.1635, 47.6492, 11.0617, 40.1568, 7.14676, 34.9509, 6.84354, 26.2617, 8.93414, 20.408, 14.6642, 16.7691 )
+color = Color( 0.85098, 0.701961, 0.701961, 1 )
+offset = Vector2( -16.5322, -47.0627 )
+script = ExtResource( 3 )
+
+[node name="bat" type="Polygon2D" parent="lady"]
+position = Vector2( 10.0466, -13.1468 )
+polygon = PoolVector2Array( 5.32709, 0.496841, 14.1978, -17.472, 15.185, -17.8984, 17.3648, -16.8781, 17.423, -15.7812, 6.16382, 1.10247 )
+color = Color( 0.815686, 0.815686, 0.815686, 1 )
+offset = Vector2( -6.67455, 1.23911 )
+
+[node name="building" type="Node2D" parent="."]
+editor/display_folded = true
+position = Vector2( 668.102, 322.634 )
+
+[node name="base" type="Polygon2D" parent="building"]
+polygon = PoolVector2Array( 106.074, -39.9365, 113.828, 337.431, 72.473, 374.91, 11.7323, 374.91, -27.0384, 338.724, -23.1613, 165.548, -12.8224, 147.455, -28.3307, 140.993, -27.0384, -39.9365, 5.27052, -78.7071, 59.5495, -82.5842 )
+offset = Vector2( -20.3853, -22.8334 )
+
+[node name="Polygon2D" type="Polygon2D" parent="building"]
+polygon = PoolVector2Array( -16.4071, -57.6005, 55.9648, -58.8928, 54.6725, 61.2962, -15.1147, 61.2962 )
+color = Color( 0.858824, 0.235294, 0.133333, 1 )
+
+[node name="Polygon2D2" type="Polygon2D" parent="building"]
+position = Vector2( 3.87708, 228.747 )
+polygon = PoolVector2Array( -16.4071, -57.6005, 55.9648, -58.8928, 54.6725, 61.2962, -15.1147, 61.2962 )
+color = Color( 0.858824, 0.235294, 0.133333, 1 )
+
+[node name="railing" type="Node2D" parent="."]
+editor/display_folded = true
+position = Vector2( 31.4889, 261.563 )
+
+[node name="base" type="Polygon2D" parent="railing"]
+polygon = PoolVector2Array( 11.7323, 374.91, -9.18266, 368.725, -23.1613, 165.548, -12.8224, 147.455, -28.3307, 140.993, -27.0384, -39.9365, -3.63084, -53.216 )
+offset = Vector2( -20.3853, -22.8334 )
+
+[node name="railing2" type="Node2D" parent="."]
+editor/display_folded = true
+position = Vector2( 297.978, 0.625977 )
+rotation = 0.96084
+
+[node name="base" type="Polygon2D" parent="railing2"]
+polygon = PoolVector2Array( 11.7323, 374.91, -9.18266, 368.725, -23.1613, 165.548, -12.8224, 147.455, -28.3307, 140.993, -27.0384, -39.9365, -3.63084, -53.216 )
+offset = Vector2( -20.3853, -22.8334 )
+
+[node name="Control" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Label" type="Label" parent="Control"]
+margin_right = 40.0
+margin_bottom = 14.0
+
