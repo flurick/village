@@ -15,7 +15,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="experiment of wave"
+config/name="mars-build"
 run/main_scene="res://build-sim.tscn"
 config/icon="res://icon.png"
 

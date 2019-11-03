@@ -23,7 +23,7 @@ var speed = 50
 var v = Vector2.ZERO
 
 func _process(delta):
-	
+
 	#local
 #	if Input.is_key_pressed(KEY_W):
 #		move_local_x( speed*delta )
@@ -33,7 +33,7 @@ func _process(delta):
 #		move_local_y( speed*delta )
 #	if Input.is_key_pressed(KEY_D):
 #		move_local_y( -speed*delta )
-	
+
 	#global
 	if Input.is_key_pressed(KEY_SPACE):
 		move_local_x( speed*delta*10 )
@@ -48,7 +48,7 @@ func _process(delta):
 #		move_local_y( speed*delta )
 #	if Input.is_key_pressed(KEY_D):
 #		move_local_y( -speed*delta )
-		
+
 	look_at( get_global_mouse_position() )
 #	update()
 

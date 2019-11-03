@@ -31,7 +31,7 @@ func _gui_input(event):
 #		print(event.scancode," ", pressed_keys.has(event.scancode), "=>", event.pressed, "(",pressed_keys[event.scancode],")")
 			pressed_keys[event.scancode] = event.is_pressed()
 			update()
-			
+
 			if event.pressed:
 				if find_node("a").text:
 					if find_node("b").text:
@@ -44,9 +44,9 @@ func _gui_input(event):
 			find_node("a").text = ""
 			find_node("b").text = ""
 			find_node("c").text = ""
-			
+
 func _draw():
-	
+
 	var start = 30
 	var x = start
 	var y = start
@@ -54,12 +54,12 @@ func _draw():
 		x+=start
 		if x+start > rect_size.x:
 			y+=start
-			x=start 
+			x=start
 		if pressed_keys[item]:
 			draw_circle( Vector2(x,y), start*0.4, fg )
 		else:
 			draw_circle( Vector2(x,y), start*0.4, bg )
-	
-	
+
+
 
 

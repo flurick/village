@@ -192,5 +192,4 @@ shadow_bias = 0.5
 [node name="Sprite3D" type="Sprite3D" parent="Sun"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 17 )
 texture = ExtResource( 7 )
-
 [connection signal="timeout" from="focus/Camera/Time of Day" to="focus/Camera/Time of Day" method="_on_Time_of_Day_timeout"]
